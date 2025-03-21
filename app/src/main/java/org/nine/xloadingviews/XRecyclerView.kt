@@ -4,9 +4,11 @@ import android.content.Context
 import android.util.AttributeSet
 import android.view.LayoutInflater
 import android.view.View
+import android.view.ViewGroup
 import android.widget.FrameLayout
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import org.nine.xloadingviews.databinding.LoadingViewBinding
 import org.nine.xloadingviews.databinding.XrecyclerViewBinding
 
 class XRecyclerView @JvmOverloads constructor(
@@ -20,14 +22,32 @@ class XRecyclerView @JvmOverloads constructor(
 
     private lateinit var b: XrecyclerViewBinding
 
+    private var mLoadingView: View? = null
     private var mAdapter: RecyclerView.Adapter<*>? = null
     private var mLayoutManager: RecyclerView.LayoutManager? = null
-
     private var mLoading = false
+    private var mEmptyText = "No data provided"
 
+    fun setEmptyText(value: String) {
+        mEmptyText = value
+        refresh()
+    }
 
     fun setAdapter(adapter: RecyclerView.Adapter<*>) {
         mAdapter = adapter
+        refresh()
+    }
+
+    fun setLoadingView(view: View) {
+        mLoadingView = view
+        if (this::b.isInitialized) {
+            (view.parent as? ViewGroup)?.removeView(view)
+            if (b.root.childCount >= 3) {
+                b.root.removeViewAt(b.root.childCount - 1)
+            }
+
+            b.root.addView(view, view.layoutParams)
+        }
         refresh()
     }
 
@@ -46,11 +66,22 @@ class XRecyclerView @JvmOverloads constructor(
             )
 
         b.apply {
+            tvEmpty.text = mEmptyText
+
+            if (mLoadingView == null) {
+                mLoadingView = LoadingViewBinding.inflate(
+                    LayoutInflater.from(context),
+                    b.root,
+                    false
+                ).root
+
+                b.root.addView(mLoadingView)
+            }
             if (mLoading) {
-                pb.show()
+                mLoadingView?.show()
                 rv.hide()
             } else {
-                pb.hide()
+                mLoadingView?.hide()
                 rv.show()
                 setupRecyclerView()
             }

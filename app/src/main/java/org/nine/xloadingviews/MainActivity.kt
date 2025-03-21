@@ -23,6 +23,7 @@ class MainActivity : AppCompatActivity() {
             xView.setLoading(true)
             val adapter = TestAdapter(arrayListOf())
             xView.setAdapter(adapter)
+            xView.setLoadingView(b.pb2)
 
             lifecycleScope.launch(Dispatchers.Default) {
                 delay(3000)
