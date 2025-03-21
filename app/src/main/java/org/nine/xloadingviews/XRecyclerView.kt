@@ -20,7 +20,7 @@ class XRecyclerView @JvmOverloads constructor(
         refresh()
     }
 
-    private lateinit var b: XrecyclerViewBinding
+    private var b: XrecyclerViewBinding? = null
 
     private var mLoadingView: View? = null
     private var mAdapter: RecyclerView.Adapter<*>? = null
@@ -30,55 +30,54 @@ class XRecyclerView @JvmOverloads constructor(
 
     fun setEmptyText(value: String) {
         mEmptyText = value
-        refresh()
+        b?.tvEmpty?.text = value
     }
 
     fun setAdapter(adapter: RecyclerView.Adapter<*>) {
         mAdapter = adapter
-        refresh()
+        setupRecyclerView()
     }
 
     fun setLoadingView(view: View) {
-        mLoadingView = view
-        if (this::b.isInitialized) {
+        b?.apply {
             (view.parent as? ViewGroup)?.removeView(view)
-            if (b.root.childCount >= 3) {
-                b.root.removeViewAt(b.root.childCount - 1)
-            }
-
-            b.root.addView(view, view.layoutParams)
+            if (mLoadingView != null)
+                root.removeView(mLoadingView)
+            root.addView(view, view.layoutParams)
         }
+
+        mLoadingView = view
         refresh()
     }
 
     fun setLayoutManager(manager: RecyclerView.LayoutManager) {
         mLayoutManager = manager
-        refresh()
+        setupRecyclerView()
     }
 
     private fun refresh() {
-
-        if (!this::b.isInitialized)
+        if (b == null)
             b = XrecyclerViewBinding.inflate(
                 LayoutInflater.from(context),
                 this,
                 true
             )
 
-        b.apply {
+        b?.apply {
             tvEmpty.text = mEmptyText
 
             if (mLoadingView == null) {
                 mLoadingView = LoadingViewBinding.inflate(
                     LayoutInflater.from(context),
-                    b.root,
+                    root,
                     false
                 ).root
 
-                b.root.addView(mLoadingView)
+                root.addView(mLoadingView)
             }
             if (mLoading) {
                 mLoadingView?.show()
+                tvEmpty.hide()
                 rv.hide()
             } else {
                 mLoadingView?.hide()
@@ -89,7 +88,7 @@ class XRecyclerView @JvmOverloads constructor(
     }
 
     private fun setupRecyclerView() {
-        b.apply {
+        b?.apply {
             rv.adapter = mAdapter
 
             rv.layoutManager = if (mLayoutManager == null) {
@@ -122,7 +121,7 @@ class XRecyclerView @JvmOverloads constructor(
     }
 
     fun handleEmptyState() {
-        b.apply {
+        b?.apply {
             if (mAdapter?.itemCount == 0) {
                 rv.hide()
                 tvEmpty.show()
