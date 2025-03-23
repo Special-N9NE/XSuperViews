@@ -1,3 +1,7 @@
+<p align="center">
+  <img src="https://github.com/Special-N9NE/XSuperViews/blob/master/XSuperViews.png?raw=true" alt="XSuperViews Logo" />
+</p>
+
 # XSuperViews 🚀
 
 A powerful Android **custom views library** designed to simplify common UI patterns like **loading states**, **empty states**, **pagination**, **swipe-to-refresh**, and more — all with minimal setup and full customization.
