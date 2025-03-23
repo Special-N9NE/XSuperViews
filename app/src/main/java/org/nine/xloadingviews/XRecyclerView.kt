@@ -7,6 +7,8 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.FrameLayout
 import android.widget.TextView
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import org.nine.xloadingviews.databinding.EmptyViewBinding
@@ -18,19 +20,23 @@ class XRecyclerView @JvmOverloads constructor(
     attrs: AttributeSet? = null
 ) : FrameLayout(context, attrs) {
 
-    init {
-        refresh()
-    }
-
     private var b: XrecyclerViewBinding? = null
 
     private var mLoadingView: View? = null
     private var mEmptyView: View? = null
     private var mAdapter: RecyclerView.Adapter<*>? = null
     private var mLayoutManager: RecyclerView.LayoutManager? = null
-    private var mLoading = false
+    private var mLoading = true
     private val defaultEmptyText = "No data provided"
     private var mEmptyText = defaultEmptyText
+    private val _state = MutableLiveData<State>()
+    val state: LiveData<State> = _state
+
+    enum class State {
+        LOADING,
+        EMPTY,
+        SUCCESS
+    }
 
     fun setCustomEmptyView(view: View) {
         b?.apply {
@@ -54,6 +60,9 @@ class XRecyclerView @JvmOverloads constructor(
 
     fun setAdapter(adapter: RecyclerView.Adapter<*>) {
         mAdapter = adapter
+
+        refresh()
+
         setupRecyclerView()
     }
 
@@ -105,6 +114,7 @@ class XRecyclerView @JvmOverloads constructor(
                 root.addView(mLoadingView)
             }
             if (mLoading) {
+                _state.postValue(State.LOADING)
                 mLoadingView?.show()
                 mEmptyView?.hide()
                 rv.hide()
@@ -152,9 +162,11 @@ class XRecyclerView @JvmOverloads constructor(
     fun handleEmptyState() {
         b?.apply {
             if (mAdapter?.itemCount == 0) {
+                _state.postValue(State.EMPTY)
                 rv.hide()
                 mEmptyView?.show()
             } else {
+                _state.postValue(State.SUCCESS)
                 mEmptyView?.hide()
                 rv.show()
             }

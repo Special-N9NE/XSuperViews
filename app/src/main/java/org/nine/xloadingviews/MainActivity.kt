@@ -1,6 +1,7 @@
 package org.nine.xloadingviews
 
 import android.os.Bundle
+import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
 import kotlinx.coroutines.Dispatchers
@@ -19,12 +20,18 @@ class MainActivity : AppCompatActivity() {
         b = ActivityMainBinding.inflate(layoutInflater)
         setContentView(b.root)
 
+        val adapter = TestAdapter(arrayListOf())
         b.apply {
-            xView.setLoading(true)
-            val adapter = TestAdapter(arrayListOf())
-            xView.setAdapter(adapter)
-            xView.setLoadingView(pb2)
-            xView.setCustomEmptyView(tvEmpty)
+            xView.apply {
+                setLoading(true)
+                setAdapter(adapter)
+                setLoadingView(pb2)
+                setCustomEmptyView(tvEmpty)
+
+                state.observe(this@MainActivity) {
+                    Log.e("wwww", it.toString())
+                }
+            }
 
             lifecycleScope.launch(Dispatchers.Default) {
                 delay(3000)
