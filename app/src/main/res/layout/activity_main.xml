@@ -13,9 +13,18 @@
 
     <ProgressBar
         android:id="@+id/pb2"
-        android:visibility="gone"
-        android:layout_gravity="center"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:indeterminateTint="#FF0" />
+        android:layout_gravity="center"
+        android:indeterminateTint="#FF0"
+        android:visibility="gone" />
+
+    <TextView
+        android:id="@+id/tvEmpty"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:background="#F00"
+        android:text="empty"
+        android:visibility="gone" />
 </FrameLayout>
