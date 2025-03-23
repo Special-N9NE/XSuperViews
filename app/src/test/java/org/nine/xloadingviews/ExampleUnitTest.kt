@@ -1,4 +1,4 @@
-package org.nine.xloadingviews
+package org.nine.application
 
 import org.junit.Test
 

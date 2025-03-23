@@ -1,4 +1,4 @@
-package org.nine.xloadingviews
+package org.nine.application
 
 import android.view.LayoutInflater
 import android.view.View

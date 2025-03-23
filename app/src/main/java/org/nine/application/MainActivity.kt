@@ -1,4 +1,4 @@
-package org.nine.xloadingviews
+package org.nine.application
 
 import android.os.Bundle
 import android.util.Log
@@ -8,7 +8,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-import org.nine.xloadingviews.databinding.ActivityMainBinding
+import org.nine.application.databinding.ActivityMainBinding
 
 class MainActivity : AppCompatActivity() {
 

@@ -1,9 +1,9 @@
 <resources>
     <!-- Base application theme. -->
-    <style name="Base.Theme.XLoadingViews" parent="Theme.Material3.Light.NoActionBar">
+    <style name="Base.Theme.Application" parent="Theme.Material3.Light.NoActionBar">
         <!-- Customize your light theme here. -->
         <!-- <item name="colorPrimary">@color/my_light_primary</item> -->
     </style>
 
-    <style name="Theme.XLoadingViews" parent="Base.Theme.XLoadingViews" />
+    <style name="Theme.Application" parent="Base.Theme.Application" />
 </resources>
