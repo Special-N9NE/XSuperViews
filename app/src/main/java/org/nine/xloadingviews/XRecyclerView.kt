@@ -34,26 +34,66 @@ class XRecyclerView @JvmOverloads constructor(
     private val _state = MutableLiveData<State>()
     val state: LiveData<State> = _state
     private var isSwipeRefresh = false
+    private var hasDivider = false
 
     enum class State {
         LOADING, EMPTY, SUCCESS
     }
+
+    init {
+        val typedArray = context.theme.obtainStyledAttributes(
+            attrs,
+            R.styleable.XRecyclerView,
+            0, 0
+        )
+
+        try {
+            mEmptyText =
+                typedArray.getString(R.styleable.XRecyclerView_emptyText) ?: defaultEmptyText
+            setEmptyText(mEmptyText)
+
+            mLoading = typedArray.getBoolean(R.styleable.XRecyclerView_loading, true)
+
+            hasDivider = typedArray.getBoolean(R.styleable.XRecyclerView_hasDivider, false)
+
+            isSwipeRefresh =
+                typedArray.getBoolean(R.styleable.XRecyclerView_swipeRefreshEnabled, false)
+
+            setSwipeRefreshEnabled(isSwipeRefresh)
+
+            if (isSwipeRefresh) {
+                setSwipeRefreshColor(
+                    typedArray.getResourceId(
+                        R.styleable.XRecyclerView_swipeRefreshColor,
+                        0
+                    )
+                )
+            }
+        } finally {
+            typedArray.recycle()
+        }
+    }
+
 
     fun setSwipeRefreshColor(@ColorRes color: Int) {
         b?.swipeRefresh?.setColorSchemeResources(color)
     }
 
     fun isSwipeRefreshEnabled(boolean: Boolean) {
+        setSwipeRefreshEnabled(boolean)
+        refresh()
+    }
+
+    private fun setSwipeRefreshEnabled(boolean: Boolean) {
         isSwipeRefresh = boolean
         if (isSwipeRefresh && mLoadingView != null) {
             b?.flContainer?.removeView(mLoadingView)
         }
         b?.swipeRefresh?.isEnabled = isSwipeRefresh
-
-        refresh()
     }
 
     private fun hideLoading() {
+        mLoading = false
         if (isSwipeRefresh)
             b?.swipeRefresh?.isRefreshing = false
         else
@@ -61,6 +101,7 @@ class XRecyclerView @JvmOverloads constructor(
     }
 
     private fun showLoading() {
+        mLoading = true
         if (isSwipeRefresh)
             b?.swipeRefresh?.isRefreshing = true
         else
@@ -105,8 +146,6 @@ class XRecyclerView @JvmOverloads constructor(
         mAdapter = adapter
 
         refresh()
-
-        setupRecyclerView()
     }
 
     fun setLoadingView(view: View) {
@@ -125,8 +164,15 @@ class XRecyclerView @JvmOverloads constructor(
         setupRecyclerView()
     }
 
-    fun addDivider() {
-        b?.rv?.addItemDecoration(DividerItemDecoration(context, DividerItemDecoration.VERTICAL))
+    fun hasDivider(boolean: Boolean) {
+        b?.rv?.apply {
+            if (boolean)
+                addItemDecoration(DividerItemDecoration(context, DividerItemDecoration.VERTICAL))
+            else {
+                if (itemDecorationCount > 0)
+                    removeItemDecorationAt(0)
+            }
+        }
     }
 
     private fun refresh() {
@@ -145,7 +191,7 @@ class XRecyclerView @JvmOverloads constructor(
 
             setEmptyText(mEmptyText)
 
-            if (mLoadingView == null) {
+            if (mLoadingView == null && !isSwipeRefresh) {
                 mLoadingView = LoadingViewBinding.inflate(
                     LayoutInflater.from(context), flContainer, false
                 ).root
@@ -175,6 +221,8 @@ class XRecyclerView @JvmOverloads constructor(
         hideLoading()
         b?.apply {
             rv.adapter = mAdapter
+
+            hasDivider(hasDivider)
 
             rv.layoutManager = if (mLayoutManager == null) {
                 LinearLayoutManager(context).apply {

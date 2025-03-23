@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <declare-styleable name="XRecyclerView">
+        <attr name="emptyText" format="string" />
+        <attr name="loading" format="boolean" />
+        <attr name="hasDivider" format="boolean" />
+        <attr name="swipeRefreshEnabled" format="boolean" />
+        <attr name="swipeRefreshColor" format="color" />
+    </declare-styleable>
+</resources>

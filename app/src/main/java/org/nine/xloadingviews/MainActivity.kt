@@ -23,13 +23,9 @@ class MainActivity : AppCompatActivity() {
         val adapter = TestAdapter(arrayListOf())
         b.apply {
             xView.apply {
-                setLoading(true)
                 setAdapter(adapter)
                 setLoadingView(pb2)
                 setCustomEmptyView(tvEmpty)
-                addDivider()
-                isSwipeRefreshEnabled(true)
-                setSwipeRefreshColor(R.color.green)
                 setNextLoadListener {
                     Log.e("xxxx", "load")
                 }
