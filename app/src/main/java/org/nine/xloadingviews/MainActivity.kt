@@ -28,8 +28,10 @@ class MainActivity : AppCompatActivity() {
                 setLoadingView(pb2)
                 setCustomEmptyView(tvEmpty)
                 addDivider()
+                isSwipeRefreshEnabled(true)
+                setSwipeRefreshColor(R.color.green)
                 setNextLoadListener {
-                    Log.e("wwww", "load")
+                    Log.e("xxxx", "load")
                 }
 
                 state.observe(this@MainActivity) {
