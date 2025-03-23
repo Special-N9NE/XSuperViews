@@ -74,24 +74,27 @@ class XRecyclerView @JvmOverloads constructor(
         }
     }
 
-
+    // Sets the swipe refresh color scheme using a resource ID
     fun setSwipeRefreshColor(@ColorRes color: Int) {
         b?.swipeRefresh?.setColorSchemeResources(color)
     }
 
-    fun isSwipeRefreshEnabled(boolean: Boolean) {
-        setSwipeRefreshEnabled(boolean)
+    // Enables or disables the swipe refresh functionality
+    fun isSwipeRefreshEnabled(enabled: Boolean) {
+        setSwipeRefreshEnabled(enabled)
         refresh()
     }
 
-    private fun setSwipeRefreshEnabled(boolean: Boolean) {
-        isSwipeRefresh = boolean
+    // Private method to manage swipe refresh enabled status
+    private fun setSwipeRefreshEnabled(enabled: Boolean) {
+        isSwipeRefresh = enabled
         if (isSwipeRefresh && mLoadingView != null) {
             b?.flContainer?.removeView(mLoadingView)
         }
         b?.swipeRefresh?.isEnabled = isSwipeRefresh
     }
 
+    // Hides the loading view
     private fun hideLoading() {
         mLoading = false
         if (isSwipeRefresh)
@@ -100,6 +103,7 @@ class XRecyclerView @JvmOverloads constructor(
             mLoadingView?.hide()
     }
 
+    // Shows the loading view
     private fun showLoading() {
         mLoading = true
         if (isSwipeRefresh)
@@ -108,6 +112,7 @@ class XRecyclerView @JvmOverloads constructor(
             mLoadingView?.show()
     }
 
+    // Sets a listener to load more data when the user scrolls to the bottom
     fun setNextLoadListener(onNextLoadListener: () -> Unit) {
         b?.rv?.addOnScrollListener(object : RecyclerView.OnScrollListener() {
             override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
@@ -124,6 +129,7 @@ class XRecyclerView @JvmOverloads constructor(
         })
     }
 
+    // Sets a custom empty view for the recycler view
     fun setCustomEmptyView(view: View) {
         b?.apply {
             (view.parent as? ViewGroup)?.removeView(view)
@@ -135,6 +141,7 @@ class XRecyclerView @JvmOverloads constructor(
         refresh()
     }
 
+    // Sets the text to be displayed when the list is empty
     fun setEmptyText(value: String?) {
         mEmptyText = value ?: defaultEmptyText
         if (mEmptyView is TextView) {
@@ -142,12 +149,13 @@ class XRecyclerView @JvmOverloads constructor(
         }
     }
 
+    // Sets the adapter for the RecyclerView
     fun setAdapter(adapter: RecyclerView.Adapter<*>) {
         mAdapter = adapter
-
         refresh()
     }
 
+    // Sets the loading view for the recycler view
     fun setLoadingView(view: View) {
         b?.apply {
             (view.parent as? ViewGroup)?.removeView(view)
@@ -159,14 +167,16 @@ class XRecyclerView @JvmOverloads constructor(
         refresh()
     }
 
+    // Sets the layout manager for the RecyclerView
     fun setLayoutManager(manager: RecyclerView.LayoutManager) {
         mLayoutManager = manager
         setupRecyclerView()
     }
 
-    fun hasDivider(boolean: Boolean) {
+    // Adds or removes a divider in the recycler view depending on the parameter
+    fun hasDivider(enabled: Boolean) {
         b?.rv?.apply {
-            if (boolean)
+            if (enabled)
                 addItemDecoration(DividerItemDecoration(context, DividerItemDecoration.VERTICAL))
             else {
                 if (itemDecorationCount > 0)
@@ -175,6 +185,7 @@ class XRecyclerView @JvmOverloads constructor(
         }
     }
 
+    // Refreshes the view based on the current loading state
     private fun refresh() {
         if (b == null) b = XrecyclerViewBinding.inflate(
             LayoutInflater.from(context), this, true
@@ -217,6 +228,7 @@ class XRecyclerView @JvmOverloads constructor(
         }
     }
 
+    // Sets up the RecyclerView with the provided layout manager and adapter
     private fun setupRecyclerView() {
         hideLoading()
         b?.apply {
@@ -252,6 +264,7 @@ class XRecyclerView @JvmOverloads constructor(
         }
     }
 
+    // Handles empty state based on the adapter's item count
     fun handleEmptyState() {
         hideLoading()
         b?.apply {
@@ -267,17 +280,19 @@ class XRecyclerView @JvmOverloads constructor(
         }
     }
 
+    // Sets the loading state and refreshes the view
     fun setLoading(value: Boolean) {
         mLoading = value
         refresh()
     }
 }
 
-
+// Extension function to show the view
 fun View.show() {
     visibility = View.VISIBLE
 }
 
+// Extension function to hide the view
 fun View.hide() {
     visibility = View.GONE
 }
