@@ -27,6 +27,7 @@ class MainActivity : AppCompatActivity() {
                 setAdapter(adapter)
                 setLoadingView(pb2)
                 setCustomEmptyView(tvEmpty)
+                addDivider()
 
                 state.observe(this@MainActivity) {
                     Log.e("wwww", it.toString())

@@ -9,6 +9,7 @@ import android.widget.FrameLayout
 import android.widget.TextView
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import org.nine.xloadingviews.databinding.EmptyViewBinding
@@ -16,8 +17,7 @@ import org.nine.xloadingviews.databinding.LoadingViewBinding
 import org.nine.xloadingviews.databinding.XrecyclerViewBinding
 
 class XRecyclerView @JvmOverloads constructor(
-    context: Context,
-    attrs: AttributeSet? = null
+    context: Context, attrs: AttributeSet? = null
 ) : FrameLayout(context, attrs) {
 
     private var b: XrecyclerViewBinding? = null
@@ -33,20 +33,16 @@ class XRecyclerView @JvmOverloads constructor(
     val state: LiveData<State> = _state
 
     enum class State {
-        LOADING,
-        EMPTY,
-        SUCCESS
+        LOADING, EMPTY, SUCCESS
     }
 
     fun setCustomEmptyView(view: View) {
         b?.apply {
             (view.parent as? ViewGroup)?.removeView(view)
-            if (mEmptyView != null)
-                root.removeView(mEmptyView)
+            if (mEmptyView != null) root.removeView(mEmptyView)
             root.addView(view, view.layoutParams)
         }
-        if (view is TextView)
-            mEmptyText = view.text.toString()
+        if (view is TextView) mEmptyText = view.text.toString()
         mEmptyView = view
         refresh()
     }
@@ -69,8 +65,7 @@ class XRecyclerView @JvmOverloads constructor(
     fun setLoadingView(view: View) {
         b?.apply {
             (view.parent as? ViewGroup)?.removeView(view)
-            if (mLoadingView != null)
-                root.removeView(mLoadingView)
+            if (mLoadingView != null) root.removeView(mLoadingView)
             root.addView(view, view.layoutParams)
         }
 
@@ -83,20 +78,19 @@ class XRecyclerView @JvmOverloads constructor(
         setupRecyclerView()
     }
 
+    fun addDivider() {
+        b?.rv?.addItemDecoration(DividerItemDecoration(context, DividerItemDecoration.VERTICAL))
+    }
+
     private fun refresh() {
-        if (b == null)
-            b = XrecyclerViewBinding.inflate(
-                LayoutInflater.from(context),
-                this,
-                true
-            )
+        if (b == null) b = XrecyclerViewBinding.inflate(
+            LayoutInflater.from(context), this, true
+        )
 
         b?.apply {
             if (mEmptyView == null) {
                 mEmptyView = EmptyViewBinding.inflate(
-                    LayoutInflater.from(context),
-                    root,
-                    false
+                    LayoutInflater.from(context), root, false
                 ).root
 
                 root.addView(mEmptyView)
@@ -106,9 +100,7 @@ class XRecyclerView @JvmOverloads constructor(
 
             if (mLoadingView == null) {
                 mLoadingView = LoadingViewBinding.inflate(
-                    LayoutInflater.from(context),
-                    root,
-                    false
+                    LayoutInflater.from(context), root, false
                 ).root
 
                 root.addView(mLoadingView)
@@ -134,8 +126,7 @@ class XRecyclerView @JvmOverloads constructor(
                 LinearLayoutManager(context).apply {
                     orientation = LinearLayoutManager.VERTICAL
                 }
-            } else
-                mLayoutManager
+            } else mLayoutManager
 
 
             mAdapter?.registerAdapterDataObserver(object : RecyclerView.AdapterDataObserver() {
