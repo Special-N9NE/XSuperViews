@@ -36,6 +36,22 @@ class XRecyclerView @JvmOverloads constructor(
         LOADING, EMPTY, SUCCESS
     }
 
+    fun setNextLoadListener(onNextLoadListener: () -> Unit) {
+        b?.rv?.addOnScrollListener(object : RecyclerView.OnScrollListener() {
+            override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
+                super.onScrolled(recyclerView, dx, dy)
+
+                val layoutManager = recyclerView.layoutManager as LinearLayoutManager? ?: return
+                val lastVisibleItem = layoutManager.findLastVisibleItemPosition()
+                val totalCount = layoutManager.itemCount
+
+                if (lastVisibleItem >= totalCount - 2) {
+                    onNextLoadListener()
+                }
+            }
+        })
+    }
+
     fun setCustomEmptyView(view: View) {
         b?.apply {
             (view.parent as? ViewGroup)?.removeView(view)

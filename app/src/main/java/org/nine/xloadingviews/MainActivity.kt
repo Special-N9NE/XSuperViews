@@ -28,6 +28,9 @@ class MainActivity : AppCompatActivity() {
                 setLoadingView(pb2)
                 setCustomEmptyView(tvEmpty)
                 addDivider()
+                setNextLoadListener {
+                    Log.e("wwww", "load")
+                }
 
                 state.observe(this@MainActivity) {
                     Log.e("wwww", it.toString())
