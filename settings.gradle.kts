@@ -21,3 +21,4 @@ dependencyResolutionManagement {
 
 rootProject.name = "XLoadingViews"
 include(":app")
+include(":XSuperViews")

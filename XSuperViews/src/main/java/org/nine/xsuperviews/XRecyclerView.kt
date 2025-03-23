@@ -1,4 +1,4 @@
-package org.nine.xloadingviews
+package org.nine.xsuperviews
 
 import android.content.Context
 import android.util.AttributeSet
@@ -14,9 +14,9 @@ import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
-import org.nine.xloadingviews.databinding.EmptyViewBinding
-import org.nine.xloadingviews.databinding.LoadingViewBinding
-import org.nine.xloadingviews.databinding.XrecyclerViewBinding
+import org.nine.xsuperviews.databinding.EmptyViewBinding
+import org.nine.xsuperviews.databinding.LoadingViewBinding
+import org.nine.xsuperviews.databinding.XrecyclerViewBinding
 
 class XRecyclerView @JvmOverloads constructor(
     context: Context, attrs: AttributeSet? = null
@@ -177,7 +177,12 @@ class XRecyclerView @JvmOverloads constructor(
     fun hasDivider(enabled: Boolean) {
         b?.rv?.apply {
             if (enabled)
-                addItemDecoration(DividerItemDecoration(context, DividerItemDecoration.VERTICAL))
+                addItemDecoration(
+                    DividerItemDecoration(
+                        context,
+                        DividerItemDecoration.VERTICAL
+                    )
+                )
             else {
                 if (itemDecorationCount > 0)
                     removeItemDecorationAt(0)

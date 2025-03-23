@@ -7,7 +7,7 @@
     android:layout_height="match_parent"
     tools:context=".MainActivity">
 
-    <org.nine.xloadingviews.XRecyclerView
+    <org.nine.xsuperviews.XRecyclerView
         android:id="@+id/xView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
